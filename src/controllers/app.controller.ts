@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Request,
-  Body,
-  NotFoundException,
-} from '@nestjs/common';
-import { LoginDto } from '../dto/login.dto';
+import { Controller, Get, Request } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { Public } from '../decorators/public.decorator';
@@ -18,28 +10,12 @@ import { ICurrentUser } from 'src/jwt/current-user.interface';
 @ApiBearerAuth()
 @Controller()
 export class AppController {
-  constructor(
-    private readonly appService: AppService,
-    private authService: AuthService,
-  ) {}
+  constructor(private readonly appService: AppService) {}
 
   @Public()
   @Get()
   getHello(): string {
     return this.appService.getHello();
-  }
-
-  @Public()
-  @Post('auth/login')
-  async login(@Body() loginDto: LoginDto) {
-    const user = await this.authService.validateUser(
-      loginDto.username,
-      loginDto.password,
-    );
-    if (!user) {
-      throw new NotFoundException();
-    }
-    return this.authService.login(user);
   }
 
   @Get('profile')
