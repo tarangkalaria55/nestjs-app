@@ -12,6 +12,7 @@ import { CurrentUser } from '../decorators/current-user.decorator';
 import { Public } from '../decorators/public.decorator';
 import { AppService } from '../services/app.service';
 import { AuthService } from '../services/auth.service';
+import { ICurrentUser } from 'src/jwt/current-user.interface';
 
 @ApiTags()
 @ApiBearerAuth()
@@ -42,7 +43,7 @@ export class AppController {
   }
 
   @Get('profile')
-  getProfile(@Request() req, @CurrentUser() user) {
+  getProfile(@Request() req, @CurrentUser() user?: ICurrentUser) {
     return { requser: req.user, user: user };
   }
 }
