@@ -6,13 +6,14 @@ import {
   Body,
   NotFoundException,
 } from '@nestjs/common';
-import { LoginDto } from './dto/login.dto';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { CurrentUser } from './decorators/current-user.decorator';
-import { Public } from './decorators/public.decorator';
-import { AppService } from './services/app.service';
-import { AuthService } from './services/auth.service';
+import { LoginDto } from '../dto/login.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CurrentUser } from '../decorators/current-user.decorator';
+import { Public } from '../decorators/public.decorator';
+import { AppService } from '../services/app.service';
+import { AuthService } from '../services/auth.service';
 
+@ApiTags()
 @ApiBearerAuth()
 @Controller()
 export class AppController {

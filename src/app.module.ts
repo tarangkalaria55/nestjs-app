@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { AppController } from './controllers/app.controller';
 import { AppService } from './services/app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
@@ -30,6 +30,7 @@ import { UsersService } from './services/users.service';
       entities: [User],
       synchronize: true,
     }),
+    TypeOrmModule.forFeature([User]),
   ],
   controllers: [AppController, AuthController],
   providers: [
