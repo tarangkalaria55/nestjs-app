@@ -6,13 +6,16 @@ import {
   Request,
   UnauthorizedException,
   Body,
+  NotFoundException,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
 import { Public } from './auth/decorators/public.decorator';
 import { CurrentUser } from './auth/decorators/current-user.decorator';
 import { LoginDto } from './dto/login.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller()
 export class AppController {
   constructor(
@@ -34,7 +37,7 @@ export class AppController {
       loginDto.password,
     );
     if (!user) {
-      throw new UnauthorizedException();
+      throw new NotFoundException();
     }
     return this.authService.login(user);
   }

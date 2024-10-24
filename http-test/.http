@@ -1,0 +1,17 @@
+@url=http://localhost:3000
+
+### 
+
+POST {{url}}/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "username": "tarang",
+  "password": "tarang"
+}
+
+###
+
+GET {{url}}/profile HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRhcmFuZyIsInN1YiI6MSwiaWF0IjoxNzI5NzU5ODQzLCJleHAiOjE3Mjk3NTk5MDN9.7uc8_eQJ0ND3BfziVQ68xrtT0TzDETd68VYz3yXlR28
