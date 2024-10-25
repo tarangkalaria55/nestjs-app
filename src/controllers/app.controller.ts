@@ -1,10 +1,8 @@
 import { Controller, Get, Request } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { CurrentUser } from '../decorators/current-user.decorator';
-import { Public } from '../decorators/public.decorator';
-import { AppService } from '../services/app.service';
-import { AuthService } from '../services/auth.service';
-import { ICurrentUser } from 'src/jwt/current-user.interface';
+import { AppService } from '../services';
+import { CurrentUser, Public } from '../decorators';
+import { ICurrentUser } from '../jwt';
 
 @ApiTags()
 @ApiBearerAuth()

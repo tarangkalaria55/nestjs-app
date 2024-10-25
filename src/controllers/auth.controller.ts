@@ -1,8 +1,8 @@
 import { Controller, Post, Body, NotFoundException } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AuthService } from '../services/auth.service';
-import { LoginDto } from '../dto/login.dto';
-import { Public } from '../decorators/public.decorator';
+import { AuthService } from '../services';
+import { Public } from '../decorators';
+import { LoginDto } from '../dto';
 
 @ApiTags('auth')
 @ApiBearerAuth()
