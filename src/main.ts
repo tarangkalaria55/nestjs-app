@@ -3,14 +3,17 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
+import * as compression from 'compression';
+import { logger } from './loggers/winston.logger';
 
 declare const module: any;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { logger: logger() });
 
-  app.enableCors();
+  app.enableCors({ origin: '*' });
   app.use(helmet());
+  app.use(compression());
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
