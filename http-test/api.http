@@ -1,6 +1,6 @@
 @baseUrl=http://localhost:3000
 
-### 
+### login api
 
 # @name login
 POST {{baseUrl}}/auth/login HTTP/1.1
@@ -12,7 +12,7 @@ Content-Type: application/json
   "password": "tarang"
 }
 
-###
+### profile api
 
 @token = {{login.response.body.access_token}}
 
