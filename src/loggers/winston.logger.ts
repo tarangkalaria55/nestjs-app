@@ -1,10 +1,19 @@
 import * as _ from 'lodash';
+import { WinstonModule } from 'nest-winston';
 import { transports, format, createLogger, LoggerOptions } from 'winston';
 import 'winston-daily-rotate-file';
 
 // custom log display format
-const customFormat = format.printf(({ timestamp, level, stack, message }) => {
-  return `${timestamp} - [${level.toUpperCase().padEnd(7)}] - ${stack || message}`;
+const customFormat = format.printf((info) => {
+  let timestamp = String(info.timestamp ?? '').trim();
+  let level = String(info.level ?? ''); //.trim();
+  let message = String(info.message ?? ''); //.trim();
+  let stack = String(info.stack ?? '').trim();
+  if (stack != '') stack = '- ' + stack;
+
+  // return `${timestamp} ${level}: ${message}`;
+
+  return `${timestamp} ${level} - ${message} ${stack}`.trim();
 });
 
 // file on daily rotation (error only)
@@ -33,9 +42,6 @@ const consoleLogger = new transports.Console({
     format.cli(),
     format.splat(),
     format.timestamp(),
-    // format.printf((info) => {
-    //   return `${info.timestamp} ${info.level}: ${info.message}`;
-    // }),
     customFormat,
   ),
 });
@@ -92,3 +98,7 @@ const instanceLogger: LoggerOptions = { ...loggerOption };
 // const instanceLogger: LoggerOptions = process.env.NODE_ENV === 'production' ? { ...prodLogger } : { ...devLogger };
 
 export const instance = createLogger(instanceLogger);
+
+export default WinstonModule.createLogger({
+  instance: instance,
+});
