@@ -17,7 +17,7 @@ import { join } from 'path';
 @ApiBearerAuth()
 @Controller()
 export class AppController {
-  private readonly logger = new Logger(AppController.name);
+  private readonly logger = new Logger('AppController');
 
   constructor(private readonly appService: AppService) {}
 

@@ -8,6 +8,7 @@ import { AppController, AuthController } from './controllers';
 import { AppService, AuthService, UsersService } from './services';
 import { User } from './entities';
 import { RequestLoggerMiddleware } from './middlewares';
+import { ChatGateway } from './gateways/chat.gateway';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { RequestLoggerMiddleware } from './middlewares';
     AppService,
     AuthService,
     UsersService,
+    ChatGateway,
   ],
 })
 export class AppModule {

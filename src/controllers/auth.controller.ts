@@ -20,6 +20,11 @@ export class AuthController {
     if (!user) {
       throw new NotFoundException();
     }
-    return this.authService.login(user);
+
+    var result = await this.authService.createToken(user);
+
+    var a = await this.authService.verifyToken(result.access_token);
+
+    return result;
   }
 }
