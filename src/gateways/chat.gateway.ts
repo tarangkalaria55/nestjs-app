@@ -1,15 +1,19 @@
-import { Logger } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
 import {
+  ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
+  WsResponse,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { AddMessageDto } from '../dto';
-import { AuthService } from '../services';
+import { AuthService, UsersService } from '../services';
+import { WsJwtGuard } from '../jwt';
+import { from, map, Observable } from 'rxjs';
 
 @WebSocketGateway({ cors: { origin: '*' } })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -18,24 +22,42 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private usersService: UsersService,
+  ) {}
 
-  handleConnection(socket: Socket, ...args: any[]) {
-    const bearer_token = socket.handshake.headers.authorization;
-    const token = this.authService.parseToken(bearer_token);
-    this.authService.verifyToken(token);
+  async handleConnection(socket: Socket, ...args: any[]) {
+    try {
+      const user = await this.authService.validateSocket(socket);
 
-    this.logger.log(`Socket connected: ${socket.id}`);
+      this.logger.log(`Socket connected: ${socket.id}`);
+    } catch (e) {
+      socket.disconnect();
+    }
   }
 
   handleDisconnect(socket: Socket) {
     this.logger.log(`Socket disconnected: ${socket.id}`);
   }
 
-  @SubscribeMessage('chat') // subscribe to chat event messages
-  handleMessage(@MessageBody() payload: AddMessageDto): AddMessageDto {
-    this.logger.log(`Message received: ${payload.author} - ${payload.body}`);
-    this.server.emit('chat', payload); // broadbast a message to all clients
-    return payload; // return the same payload data
+  private afterConnect() {}
+
+  private beforeDisconnect() {}
+
+  @UseGuards(WsJwtGuard)
+  @SubscribeMessage('events')
+  findAll(
+    @MessageBody() data: any,
+    @ConnectedSocket() socket: Socket,
+  ): Observable<WsResponse<number>> {
+    return from([1, 2, 3]).pipe(
+      map((item) => ({ event: 'events', data: item })),
+    );
+  }
+
+  @SubscribeMessage('identity')
+  async identity(@MessageBody() data: number): Promise<number> {
+    return data;
   }
 }

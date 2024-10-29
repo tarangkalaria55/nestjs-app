@@ -15,7 +15,7 @@ import { ChatGateway } from './gateways/chat.gateway';
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '60m' },
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
